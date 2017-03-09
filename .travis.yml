@@ -42,7 +42,7 @@ before_install:
   - git clone -b master https://$GITHUB_USER:$GITHUB_PWD@github.com/IBM-Swift/Testing-Credentials.git
 
 script:
-  - source ./ci/execution_script.sh
+  - source ./ci/execute_script.sh
 
 # Deploy application to Bluemix - assumes service dependencies are already bound to existing app to start successfully
 deploy:
