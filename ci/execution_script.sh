@@ -16,8 +16,10 @@
 
 set -ev
 
-if [[ $TRAVIS && $TRAVIS_BRANCH == "master" ]]; then
+if [[ $TRAVIS && $TRAVIS_BRANCH = "master" ]]; then
+    echo "Building with 'production' credentials..."
     ./Package-Builder/build-package.sh -projectDir $TRAVIS_BUILD_DIR -credentialsDir $TRAVIS_BUILD_DIR/Testing-Credentials/swift-enterprise-demo/production
 else
+    echo "Building with 'development' credentials..."
     ./Package-Builder/build-package.sh -projectDir $TRAVIS_BUILD_DIR -credentialsDir $TRAVIS_BUILD_DIR/Testing-Credentials/swift-enterprise-demo/development
 fi
