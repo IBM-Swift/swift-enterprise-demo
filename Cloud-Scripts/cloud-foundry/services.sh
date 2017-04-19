@@ -25,6 +25,6 @@ set -e
 
 # Create services
 echo "Creating services..."
-cf create-service alertnotification authorizedusers "SwiftEnterpriseDemo-Alert"
-cf create-service Auto-Scaling free "SwiftEnterpriseDemo-Auto-Scaling"
+bx service create alertnotification authorizedusers "SwiftEnterpriseDemo-Alert"
+bx service create Auto-Scaling free "SwiftEnterpriseDemo-Auto-Scaling"
 echo "Services created."
