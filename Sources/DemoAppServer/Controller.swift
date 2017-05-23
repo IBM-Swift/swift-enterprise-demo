@@ -31,6 +31,7 @@ import AlertNotifications
 import CircuitBreaker
 
 public class Controller {
+    //
     enum DemoError: Swift.Error {
         case BadHostURL, InvalidPort
     }
