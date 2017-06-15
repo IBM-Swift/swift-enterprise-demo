@@ -23,7 +23,7 @@ let package = Package(
     ],
     dependencies: [
         .Package(url: "https://github.com/IBM-Swift/HeliumLogger.git", majorVersion: 1),
-        .Package(url: "https://github.com/IBM-Swift/CircuitBreaker.git", majorVersion: 0),
+        .Package(url: "https://github.com/IBM-Swift/CircuitBreaker.git", majorVersion: 1),
         .Package(url: "https://github.com/RuntimeTools/SwiftMetrics.git", majorVersion: 1),
         .Package(url: "https://github.com/IBM-Swift/alert-notification-sdk.git", majorVersion: 1)
 ])

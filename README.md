@@ -17,12 +17,12 @@ The browser-based component of this application provides UI widgets that you can
 ## Application Communication Workflow
 ![Application Workflow](imgs/archi_dia.png)
 
-* The user configures the setting for circuit breaker library in the code before deploying the application to bluemix.
-* After deploying the application, the user creates policy on bluemix to set up the Auto-Scaling and Alert Notification services.
+* The user configures the setting for the circuit breaker library in the code before deploying the application to bluemix.
+* After deploying the application, the user creates a policy on bluemix to set up the Auto-Scaling and Alert Notification services.
 * The user interacts with the application in their browser.
-* When the user performs any action, UI calls the swift application API.
+* When the user performs any action, the UI calls the Swift application API.
 * Once the conditions for auto-scaling policy is satisfied, the application scales in bluemix.
-* When several requests for endpoint fails, circuit breaker library activates for the configured endpoint.
+* When several requests for the endpoint fails, the circuit breaker library activates for the configured endpoint.
 
 ## Swift version
 The latest version of Swift-Enterprise-Demo works with the `3.1.1` version of the Swift binaries. You can download this version of the Swift binaries by following this [link](https://swift.org/download/#snapshots).
@@ -33,12 +33,12 @@ Clicking on the button below creates a Bluemix DevOps Toolchain and deploys this
 
 [![Deploy to Bluemix](https://bluemix.net/deploy/button.png)](https://bluemix.net/deploy?repository=https://github.com/IBM/swift-enterprise-demo.git)
 
-Once deployment to Bluemix is completed, you can access the route assigned to your application using the web browser of your choice (e.g., Chrome, FireFox, etc.). You should then see the welcome page for the SwiftEnterpriseDemo app.
+Once deployment to Bluemix is complete, you can access the route assigned to your application using the web browser of your choice (e.g., Chrome, FireFox, etc.). You should then see the welcome page for the SwiftEnterpriseDemo app.
 
 Note that the [IBM Bluemix buildpack for Swift](https://github.com/IBM-Swift/swift-buildpack) is used for the deployment of this app to Bluemix. This IBM Bluemix Runtime for Swift is currently installed in the following Bluemix regions: US South, United Kingdom, and Sydney.
 
 ### Using the Bluemix command line
-You can also manually deploy the Swift-Enterprise-Demo app to Bluemix. Though not as magical as using the Bluemix button above, manually deploying the app gives you some insights about what is happening behind the scenes. Remember that you'd need the Bluemix [command line](http://clis.ng.bluemix.net/ui/home.html) installed on your system to deploy the app to Bluemix.
+You can also manually deploy the Swift-Enterprise-Demo app to Bluemix. Though not as magical as using the Bluemix button above, manually deploying the app gives you some insights about what is happening behind the scenes. Keep in mind that you need the Bluemix [command line](http://clis.ng.bluemix.net/ui/home.html) installed on your system to deploy the app to Bluemix.
 
 Execute the following command to clone the Git repository:
 
@@ -46,7 +46,7 @@ Execute the following command to clone the Git repository:
 git clone https://github.com/IBM/swift-enterprise-demo
 ```
 
-Go to the project's root folder on your system and execute the `Cloud-Scripts/cloud-foundry/services.sh` script to create the services Swift-Enterprise-Demo depends on. Please note that you should have logged on to Bluemix before attempting to execute this script. For information on how to log in, see the Bluemix [documentation](https://console.ng.bluemix.net/docs/starters/install_cli.html).
+Go to the project's root directory on your system and execute the `Cloud-Scripts/cloud-foundry/services.sh` script to create the services that Swift-Enterprise-Demo depends on. Please note that you should log in to Bluemix before attempting to execute this script. For information on how to log in, see the Bluemix [documentation](https://console.ng.bluemix.net/docs/starters/install_cli.html).
 
 Executing the `Cloud-Scripts/cloud-foundry/services.sh` script should result in output similar to this:
 
@@ -66,7 +66,7 @@ Creating service instance SwiftEnterpriseDemo-Auto-Scaling in org roliv@us.ibm.c
 OK
 ```
 
-After the services are created, you can issue the `bx app push` command from the project's root folder to deploy the Swift-Enterprise-Demo application to Bluemix.
+After the services are created, you can issue the `bx app push` command from the project's root directory to deploy the Swift-Enterprise-Demo application to Bluemix.
 
 ```bash
 $ bx app push
@@ -187,7 +187,7 @@ Ricardos-MacBook-Pro:swift-enterprise-demo olivieri$
 ```
 
 ## Configuring the Swift-Enterprise-Demo application
-The `cloud_config.json` configuration file found in the root folder of the application's repository should be updated before you start using the application.
+The `cloud_config.json` configuration file found in the root directory of the application's repository should be updated before you start using the application.
 
 ```bash
 $ cat cloud_config.json
@@ -243,117 +243,109 @@ Also, the Swift-Enterprise-Demo application sends alerts based on the Auto-Scali
 Once you've updated the `cloud_config.json` configuration file, you should update your application instance of Swift-Enterprise-Demo on Bluemix. To do, you should execute the `bx app push` command from the root folder of the applications's repository.
 
 ## Running the application locally
-In order to build the application locally, use the appropriate command depending on the operating system you are running on your development system:
+Build the application from the command line:
 
-* Linux: `swift build`
-* macOS: `swift build -Xlinker -lc++`
+* `swift build`
 
 ```bash
-$ swift build -Xlinker -lc++
-Cloning https://github.com/IBM-Swift/Kitura.git
-HEAD is now at 44914b5 Unify query string parsing for 'RouterRequest' and 'BodyParser' (#1026)
-Resolved version: 1.6.2
-Cloning https://github.com/IBM-Swift/Kitura-net.git
-HEAD is now at 34176a2 Merge the memory leak fixes into master (#176)
-Resolved version: 1.6.2
-Cloning https://github.com/IBM-Swift/LoggerAPI.git
-HEAD is now at 1e6f08e Perf: Use autoclosures to prevent String construction (#18)
-Resolved version: 1.6.0
-Cloning https://github.com/IBM-Swift/BlueSocket.git
-HEAD is now at 32c2dd8 Merge pull request #55 from OhItsShaun/master
-Resolved version: 0.12.33
-Cloning https://github.com/IBM-Swift/CCurl.git
-HEAD is now at 3cfb752 Add header callback helper function (#9)
-Resolved version: 0.2.3
-Cloning https://github.com/IBM-Swift/BlueSSLService.git
-HEAD is now at 1082e2e Removed the extraneous check for OS.  Not required.
-Resolved version: 0.12.26
-Cloning https://github.com/IBM-Swift/SwiftyJSON.git
-HEAD is now at 5ca3f00 Merge pull request #30 from IBM-Swift/issue_939
-Resolved version: 15.0.5
-Cloning https://github.com/IBM-Swift/Kitura-TemplateEngine.git
-HEAD is now at d876e99 An alternative implementation of PR https://github.com/IBM-Swift/Kitura-TemplateEngine/pull/11 (#12)
-Resolved version: 1.6.0
-Cloning https://github.com/IBM-Swift/Kitura-WebSocket.git
-HEAD is now at 727943d IBM-Swift/Kitura#1023 Use ClientResponse instead of HTTPIncomingMessage
-Resolved version: 0.7.1
-Cloning https://github.com/IBM-Swift/BlueCryptor.git
-HEAD is now at ed97adc Merge pull request #20 from carlbrown/leakfix
-Resolved version: 0.8.8
-Cloning https://github.com/IBM-Swift/CommonCrypto.git
-HEAD is now at 02a5c05 Merge pull request #4 from Bouke/master
-Resolved version: 0.1.4
-Cloning https://github.com/IBM-Swift/HeliumLogger.git
-HEAD is now at a6ea950 Regenerated API documentation
-Resolved version: 1.6.0
-Cloning https://github.com/IBM-Swift/CloudConfiguration.git
-HEAD is now at a1686aa Added apiURL field to auto-scaling credentials.
-Resolved version: 1.1.3
-Cloning https://github.com/IBM-Swift/Swift-cfenv.git
-HEAD is now at 5be2119 Made public fields in Limits structure.
-Resolved version: 3.0.2
-Cloning https://github.com/IBM-Swift/Configuration.git
-HEAD is now at 0b41b36 Change load functions to log errors instead of throwing
-Resolved version: 0.2.0
-Cloning https://d7d10e9fbcfb7eb9c9085927777fcdca9a323586@github.com/IBM-Swift/CircuitBreaker.git
-HEAD is now at 7ff7310 Merge pull request #23 from IBM-Swift/develop
-Resolved version: 0.0.9
+$ swift build 
+Fetching https://github.com/IBM-Swift/HeliumLogger.git
+Fetching https://github.com/IBM-Swift/CircuitBreaker.git
+Fetching https://github.com/RuntimeTools/SwiftMetrics.git
+Fetching https://github.com/IBM-Swift/alert-notification-sdk.git
+Fetching https://github.com/IBM-Swift/LoggerAPI.git
+Fetching https://github.com/IBM-Swift/Kitura.git
+Fetching https://github.com/IBM-Swift/Kitura-WebSocket.git
+Fetching https://github.com/IBM-Swift/Kitura-Request.git
+Fetching https://github.com/IBM-Swift/CloudConfiguration.git
+Fetching https://github.com/IBM-Swift/Kitura-net.git
+Fetching https://github.com/IBM-Swift/SwiftyJSON.git
+Fetching https://github.com/IBM-Swift/Kitura-TemplateEngine.git
+Fetching https://github.com/IBM-Swift/BlueSocket.git
+Fetching https://github.com/IBM-Swift/CCurl.git
+Fetching https://github.com/IBM-Swift/BlueSSLService.git
+Fetching https://github.com/IBM-Swift/BlueCryptor.git
+Fetching https://github.com/IBM-Swift/CommonCrypto.git
+Fetching https://github.com/IBM-Swift/Swift-cfenv.git
+Fetching https://github.com/IBM-Swift/Configuration.git
 Cloning https://github.com/RuntimeTools/SwiftMetrics.git
-HEAD is now at 3dff821 Merge pull request #72 from sjanuary/graphbug
-Resolved version: 0.0.20
-Cloning https://github.com/RuntimeTools/omr-agentcore.git
-HEAD is now at c35de73 Correct CPU timestamp on Mac to msSinceEpoch
-Resolved version: 3.1.1
-Cloning https://github.com/IBM-Swift/Kitura-Request.git
-HEAD is now at 2634d14 Updated dependencies
-Resolved version: 0.7.0
-Cloning https://d7d10e9fbcfb7eb9c9085927777fcdca9a323586@github.com/IBM-Swift/alert-notification-sdk.git
-HEAD is now at 074af0a Id, not name
-Resolved version: 0.1.5
-Compile paho src/utf-8.c
-Compile paho src/Tree.c
-Compile paho src/Thread.c
-Compile paho src/StackTrace.c
-Compile paho src/SocketBuffer.c
-Compile paho src/Socket.c
-Compile paho src/MQTTProtocolOut.c
-Compile paho src/MQTTProtocolClient.c
-Compile paho src/MQTTPersistenceDefault.c
-Compile paho src/MQTTPersistence.c
+Resolving https://github.com/RuntimeTools/SwiftMetrics.git at 1.2.1
+Cloning https://github.com/IBM-Swift/Kitura-TemplateEngine.git
+Resolving https://github.com/IBM-Swift/Kitura-TemplateEngine.git at 1.7.1
+Cloning https://github.com/IBM-Swift/Kitura.git
+Resolving https://github.com/IBM-Swift/Kitura.git at 1.7.5
+Cloning https://github.com/IBM-Swift/alert-notification-sdk.git
+Resolving https://github.com/IBM-Swift/alert-notification-sdk.git at 1.0.1
+Cloning https://github.com/IBM-Swift/CloudConfiguration.git
+Resolving https://github.com/IBM-Swift/CloudConfiguration.git at 2.0.5
 
 ...
 
+Resolving https://github.com/IBM-Swift/BlueSSLService.git at 0.12.43
+Cloning https://github.com/IBM-Swift/BlueCryptor.git
+Resolving https://github.com/IBM-Swift/BlueCryptor.git at 0.8.14
+Cloning https://github.com/IBM-Swift/SwiftyJSON.git
+Resolving https://github.com/IBM-Swift/SwiftyJSON.git at 16.0.0
+Compile Swift Module 'Socket' (3 sources)
+Compile Swift Module 'LoggerAPI' (1 sources)
+Compile Swift Module 'Cryptor' (10 sources)
+Compile Swift Module 'SwiftyJSON' (2 sources)
+Compile Swift Module 'KituraTemplateEngine' (1 sources)
+Compile Swift Module 'Configuration' (6 sources)
+Compile Swift Module 'HeliumLogger' (2 sources)
+Compile Swift Module 'CircuitBreaker' (3 sources)
+Compile Swift Module 'TestProgram' (1 sources)
 Compile Swift Module 'CloudFoundryEnv' (6 sources)
-Compile Swift Module 'CircuitBreaker' (2 sources)
-Compile Swift Module 'HerokuConfig' (1 sources)
+Linking ./.build/debug/TestProgram
 Compile Swift Module 'CloudFoundryConfig' (2 sources)
-Compile Swift Module 'AmazonConfig' (1 sources)
 Compile Swift Module 'SSLService' (1 sources)
+Compile Swift Module 'AlertNotifications' (8 sources)
 Compile CHTTPParser utils.c
 Compile CHTTPParser http_parser.c
 Linking CHTTPParser
-Compile Swift Module 'KituraNet' (34 sources)
-Compile Swift Module 'Kitura' (43 sources)
+Compile Swift Module 'KituraNet' (35 sources)
 Compile Swift Module 'KituraRequest' (14 sources)
-Compile Swift Module 'KituraWebSocket' (9 sources)
-Compile Swift Module 'AlertNotifications' (8 sources)
-Compile Swift Module 'SwiftMetrics' (2 sources)
-Compile Swift Module 'SwiftMetricsKitura' (1 sources)
+Compile Swift Module 'KituraWebSocket' (10 sources)
+Compile Swift Module 'Kitura' (43 sources)
+Compile agentcore ibmras/monitoring/connector/headless/HLConnector.cpp
+Compile agentcore ibmras/monitoring/connector/configuration/ConfigurationConnector.cpp
+Compile agentcore ibmras/monitoring/agent/threads/WorkerThread.cpp
+Compile agentcore ibmras/monitoring/agent/threads/ThreadPool.cpp
+Compile agentcore ibmras/common/port/osx/Thread.cpp
+Compile agentcore ibmras/common/port/osx/Process.cpp
+Compile agentcore ibmras/monitoring/connector/ConnectorManager.cpp
+Compile agentcore ibmras/monitoring/agent/SystemReceiver.cpp
+Compile agentcore ibmras/monitoring/agent/BucketList.cpp
+Compile agentcore ibmras/monitoring/agent/Bucket.cpp
+Compile agentcore ibmras/monitoring/agent/Agent.cpp
+Compile agentcore ibmras/common/util/sysUtils.cpp
+Compile agentcore ibmras/common/util/strUtils.cpp
+Compile agentcore ibmras/common/util/LibraryUtils.cpp
+Compile agentcore ibmras/common/util/FileUtils.cpp
+Compile agentcore ibmras/common/port/ThreadData.cpp
+Compile agentcore ibmras/common/port/Lock.cpp
+Compile agentcore ibmras/monitoring/Plugin.cpp
+
+...
+
 Compile Swift Module 'SwiftMetricsBluemix' (1 sources)
 Compile Swift Module 'SwiftMetricsDash' (1 sources)
-Compile Swift Module 'DemoAppServer' (10 sources)
+Compile Swift Module 'DemoAppServer' (9 sources)
 Linking ./.build/debug/DemoAppServer
+
 ```
 
 Before you run the executable (i.e. `DemoAppServer`) to launch the application, make sure you [configure](#configuring-the-swift-enterprise-demo-application) the application.
 
 ```bash
 $ ./.build/debug/DemoAppServer
-[Mon Mar 13 11:28:46 2017] com.ibm.diagnostics.healthcenter.loader INFO: Swift Application Metrics
+[Thu Jun 15 09:55:01 2017] com.ibm.diagnostics.healthcenter.loader INFO: Swift Application Metrics
 results: []
-[2017-03-13T11:28:46.685-05:00] [ERROR] [SwiftMetricsBluemix.swift:116 initCredentials()] [Auto-Scaling Agent] Could not find Auto-Scaling service.
-[2017-03-13T11:28:46.690-05:00] [ERROR] [Controller.swift:140 getAutoScalingPolicy()] App is either running locally or an application ID could not be found. Cannot acquire auto-scaling policy information.
-[2017-03-13T11:28:50.704-05:00] [INFO] [HTTPServer.swift:88 listen(on:)] Listening on port 8080
+[2017-06-15T09:55:01.756-05:00] [INFO] [SwiftMetricsBluemix.swift:163 detectBAMBinding(swiftMetricsInstance:)] [SwiftMetricsBluemix] Could not find BAM service.
+results: []
+[2017-06-15T09:55:01.758-05:00] [ERROR] [SwiftMetricsBluemix.swift:174 initCredentials()] [Auto-Scaling Agent] Could not find Auto-Scaling service.
+[2017-06-15T09:55:01.763-05:00] [ERROR] [Controller.swift:142 getAutoScalingPolicy()] App is either running locally or an application ID could not be found. Cannot acquire auto-scaling policy information.
+[2017-06-15T09:55:01.765-05:00] [INFO] [HTTPServer.swift:117 listen(on:)] Listening on port 8080
 ```
 
 After you have started the application, you can use your browser of choice and point to `http://localhost:8080/` for accessing the main page of the app:
