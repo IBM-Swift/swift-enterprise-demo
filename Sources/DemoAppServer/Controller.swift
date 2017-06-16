@@ -87,7 +87,7 @@ public class Controller {
         self.jsonDispatchQueue = DispatchQueue(label: "jsonResponseQueue")
 
         // Circuit breaker.
-        self.breaker = CircuitBreaker(timeout: 10, maxFailures: 3, fallback: circuitTimeoutCallback, commandWrapper: circuitRequestWrapper)
+        self.breaker = CircuitBreaker(timeout: 10000, maxFailures: 3, rollingWindow: 60000, fallback: circuitTimeoutCallback, commandWrapper: circuitRequestWrapper)
         self.broadcastQueue = DispatchQueue(label: "circuitBroadcastQueue", qos: DispatchQoS.userInitiated)
         self.circuitEndpointEnabled = true
         self.circuitDelayTime = 0
@@ -232,7 +232,8 @@ public class Controller {
         
         // Data about the Circuit Breaker endpoint.
         initDict["circuitEnabled"] = self.circuitEndpointEnabled
-        initDict["circuitDelay"] = Int(self.circuitDelayTime)
+
+        initDict["circuitDelay"] = Int(Double(self.circuitDelayTime) / 1000)
 
         if let initData = try? JSONSerialization.data(withJSONObject: initDict, options: []) {
             response.status(.OK).send(data: initData)
