@@ -1,0 +1,19 @@
+{
+    "alertnotifications": {
+        "searchPatterns": [
+            "cloudfoundry:SwiftEnterpriseDemo-Alert",
+            "file:config/configuration.json:Alert"
+        ]
+    },
+    "Auto-Scaling": {
+        "searchPatterns": [
+           "cloudfoundry:SwiftEnterpriseDemo-Auto-Scaling",
+           "file:config/configuration.json:Auto-Scaling"
+        ]
+    },
+    "cf-oauth-token": {
+        "searchPatterns": [
+           "file:config/configuration.json:cf-oauth-token"
+        ]
+    }
+}

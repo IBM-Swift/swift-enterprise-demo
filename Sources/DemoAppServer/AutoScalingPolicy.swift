@@ -17,8 +17,8 @@
 import Foundation
 import LoggerAPI
 import AlertNotifications
+import CloudEnvironment
 import Configuration
-import CloudFoundryEnv
 
 class AutoScalingPolicy {
     enum MetricType: String {
@@ -67,7 +67,7 @@ class AutoScalingPolicy {
         self.policyTriggers = triggerArray
     }
 
-    func checkPolicyTriggers(metric: MetricType, value: Int, configMgr: ConfigurationManager, usingCredentials credentials: ServiceCredentials) {
+    func checkPolicyTriggers(metric: MetricType, value: Int, configMgr: ConfigurationManager, usingCredentials credentials: AlertNotificationCredentials) {
         for trigger in self.policyTriggers {
             guard trigger.metricType == metric else {
                 continue

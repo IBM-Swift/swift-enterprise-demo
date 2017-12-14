@@ -1,4 +1,7 @@
-/**
+// swift-tools-version:4.0
+// The swift-tools-version declares the minimum version of Swift required to build this package.
+
+/*
  * Copyright IBM Corporation 2017
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,18 +15,29 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- **/
+ */
 
 import PackageDescription
 
 let package = Package(
     name: "SwiftEnterpriseDemo",
-    targets: [
-        Target(name: "DemoAppServer")
+    products: [
+        .executable(
+            name: "SwiftEnterpriseDemo",
+            targets: ["DemoAppServer"]
+        ),
     ],
     dependencies: [
-        .Package(url: "https://github.com/IBM-Swift/HeliumLogger.git", majorVersion: 1),
-        .Package(url: "https://github.com/IBM-Swift/CircuitBreaker.git", majorVersion: 2),
-        .Package(url: "https://github.com/RuntimeTools/SwiftMetrics.git", majorVersion: 1),
-        .Package(url: "https://github.com/IBM-Swift/alert-notification-sdk.git", majorVersion: 1)
-])
+        .package(url: "https://github.com/IBM-Swift/HeliumLogger.git", from: "1.0.0"),
+        .package(url: "https://github.com/IBM-Swift/CircuitBreaker.git", from: "3.0.0"),
+        .package(url: "https://github.com/IBM-Swift/KituraContracts.git", from: "0.0.0"),
+        .package(url: "https://github.com/RuntimeTools/SwiftMetrics.git", from: "2.1.0"),
+        .package(url: "https://github.com/IBM-Swift/alert-notification-sdk.git", from: "2.0.0")
+    ],
+    targets: [
+        .target(
+            name: "DemoAppServer",
+            dependencies: ["HeliumLogger", "CircuitBreaker", "SwiftMetrics", "AlertNotifications", "KituraContracts"]
+        ),
+    ]
+)

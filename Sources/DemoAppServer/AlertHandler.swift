@@ -16,10 +16,10 @@
 
 import Foundation
 import AlertNotifications
+import CloudEnvironment
 import Configuration
-import CloudFoundryConfig
 
-func sendAlert(type: AutoScalingPolicy.MetricType, configMgr: ConfigurationManager, usingCredentials credentials: ServiceCredentials, callback: @escaping (Alert?, Error?) -> Void) {
+func sendAlert(type: AutoScalingPolicy.MetricType, configMgr: ConfigurationManager, usingCredentials credentials: AlertNotificationCredentials, callback: @escaping (Alert?, Error?) -> Void) {
     do {
         let alert = try buildAlert(type: type, configMgr: configMgr)
         try AlertService.post(alert, usingCredentials: credentials, callback: callback)
@@ -52,11 +52,11 @@ func buildAlert(type: AutoScalingPolicy.MetricType, configMgr: ConfigurationMana
     builder = builder.setDate(Date())
     builder = builder.setApplicationsOrServices(["\(appName)"])
     builder = builder.setURLs([Alert.URL(description: "\(appName)", URL: "\(configMgr.url)")])
-    // Add details later - exact amount of memory/CPU.
+    //Add details later - exact amount of memory/CPU.
     return try builder.build()
 }
 
-func deleteAlert(shortId: String, usingCredentials credentials: ServiceCredentials, callback: @escaping (Error?) -> Void) {
+func deleteAlert(shortId: String, usingCredentials credentials: AlertNotificationCredentials, callback: @escaping (Error?) -> Void) {
     do {
         try AlertService.delete(shortId: shortId, usingCredentials: credentials, callback: callback)
     }

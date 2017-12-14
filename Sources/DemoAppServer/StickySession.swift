@@ -18,13 +18,12 @@ import Kitura
 import LoggerAPI
 import Foundation
 import Configuration
-import CloudFoundryEnv
-import CloudFoundryConfig
+import CloudEnvironment
 
 class StickySession: RouterMiddleware {
     let JSESSIONID: String?
     
-    init(withConfigMgr configMgr: ConfigurationManager) {
+    init(configMgr: ConfigurationManager) {
         if configMgr.isLocal == false, let appData = configMgr.getApp() {
             self.JSESSIONID = "\(appData.instanceIndex)"
         } else {

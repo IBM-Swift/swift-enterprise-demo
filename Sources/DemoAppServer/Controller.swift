@@ -21,29 +21,35 @@ import Foundation
 import LoggerAPI
 import Kitura
 import KituraWebSocket
-import SwiftyJSON
 import Configuration
 import CloudFoundryEnv
-import CloudFoundryConfig
+import CloudEnvironment
 import SwiftMetrics
 import SwiftMetricsBluemix
 import AlertNotifications
 import CircuitBreaker
 
+public struct Integer: Codable {
+  let value: Int
+}
+
 public class Controller {
     enum DemoError: Swift.Error {
-        case BadHostURL, InvalidPort
+        case badHostURL, invalidPort, credentialsNotFound(for: String)
     }
 
-    let configMgr: ConfigurationManager
-    let router: Router
-    let credentials: ServiceCredentials
+    let cloudEnv = CloudEnv()
+    let configMgr = ConfigurationManager()
+    let router = Router()
+
+    // Credentials
+    let alertCredentials: AlertNotificationCredentials
 
     // Metrics variables
     var metrics: SwiftMetrics
     var monitor: SwiftMonitor
     var bluemixMetrics: SwiftMetricsBluemix
-    var metricsDict: [String: Any]
+    var metricsDict: [String: Any] = [:]
     var currentMemoryUser: MemoryUser? = nil
     var autoScalingPolicy: AutoScalingPolicy? = nil
 
@@ -58,29 +64,25 @@ public class Controller {
     var circuitEndpointEnabled: Bool
     var circuitDelayTime: UInt32
 
-    // Location of the cloud config file.
-    let cloudConfigFile = "cloud_config.json"
-
     var port: Int {
-        get { return configMgr.port }
+        get { return cloudEnv.port }
     }
 
     var url: String {
-        get { return configMgr.url }
+        get { return cloudEnv.url }
     }
 
     init() throws {
-        // App configuration.
-        self.configMgr = ConfigurationManager()
-        configMgr.load(file: "../../\(cloudConfigFile)")
-        configMgr.load(file: cloudConfigFile, relativeFrom: .pwd)
-        configMgr.load(.environmentVariables)
-        self.metricsDict = [:]
-        self.router = Router()
 
-        // Credentials for the Alert Notifications SDK.
-        let alertNotificationService = try configMgr.getAlertNotificationService(name: "SwiftEnterpriseDemo-Alert")
-        self.credentials = ServiceCredentials(url: alertNotificationService.url, name: alertNotificationService.id, password: alertNotificationService.password)
+        // Environment
+        guard let alertCredentials = cloudEnv.getAlertNotificationCredentials(name: "alertnotifications") else {
+            throw DemoError.credentialsNotFound(for: "Alert Nortificaiton Credentials")
+        }
+
+        configMgr.load(.environmentVariables)
+
+        // Credentials
+        self.alertCredentials = alertCredentials
 
         // Demo variables.
         self.jsonDelayTime = 0
@@ -101,7 +103,7 @@ public class Controller {
 
         // Router configuration.
         self.router.all("/", middleware: BodyParser())
-        self.router.all("/", middleware: StickySession(withConfigMgr: self.configMgr))
+        self.router.all("/", middleware: StickySession(configMgr: configMgr))
         self.router.get("/", middleware: StaticFileServer(path: "./public"))
         self.router.get("/initData", handler: getInitDataHandler)
         self.router.get("/metrics", handler: getMetricsHandler)
@@ -143,24 +145,19 @@ public class Controller {
             return
         }
 
-        let autoScalingServices = configMgr.getServices(type: "Auto-Scaling")
-        guard autoScalingServices.count > 0 else {
-            Log.error("No auto-scaling service was found for this application.")
-            return
-        }
-
-        guard let autoScalingService = AutoScalingService(withService: autoScalingServices[0]) else {
+        guard let autoScalingCredentials = cloudEnv.getAutoScalingCredentials(name: "Auto-Scaling") else {
             Log.error("Could not obtain information for auto-scaling service.")
             return
         }
 
-        let policyURLString = "\(autoScalingService.apiURL)/v1/autoscaler/apps/\(appID)/policy"
+        let policyURLString = "\(autoScalingCredentials.apiURL)/v1/autoscaler/apps/\(appID)/policy"
+
         guard let policyURL = URL(string: policyURLString) else {
             Log.error("Invalid URL. Could not acquire auto-scaling policy.")
             return
         }
 
-        guard let oauthToken = configMgr["cf-oauth-token"] as? String else {
+        guard let oauthToken = cloudEnv.getString(name: "cf-oauth-token") else {
             Log.error("No oauth token provided. Cannot obtain auto-scaling policy.")
             return
         }
@@ -217,15 +214,17 @@ public class Controller {
 
         if configMgr.isLocal == false, let appData = configMgr.getApp(), let appName = configMgr.name {
             var bluemixHostURL = "console.ng.bluemix.net"
-            if configMgr.url.range(of: "stage1") != nil {
+            if cloudEnv.url.range(of: "stage1") != nil {
                 bluemixHostURL = "console.stage1.ng.bluemix.net"
             }
             initDict["monitoringURL"] = "https://\(bluemixHostURL)/monitoring/index?dashboard=console.dashboard.page.appmonitoring1&nav=false&ace_config=%7B%22spaceGuid%22%3A%22\(appData.spaceId)%22%2C%22appGuid%22%3A%22\(appData.id)%22%2C%22bluemixUIVersion%22%3A%22Atlas%22%2C%22idealHeight%22%3A571%2C%22theme%22%3A%22bx--global-light-ui%22%2C%22appName%22%3A%22\(appName)%22%2C%22appRoutes%22%3A%22\(appData.uris[0])%22%7D&bluemixNav=true"
+
             initDict["websocketURL"] = "wss://\(appData.uris[0])/circuit"
             if let credDict = configMgr.getService(spec: ".*[Aa]uto-[Ss]caling.*")?.credentials, let autoScalingServiceID = credDict["service_id"] {
                 initDict["autoScalingURL"] = "https://\(bluemixHostURL)/services/\(autoScalingServiceID)?ace_config=%7B%22spaceGuid%22%3A%22\(appData.spaceId)%22%2C%22appGuid%22%3A%22\(appData.id)%22%2C%22redirect%22%3A%22https%3A%2F%2F\(bluemixHostURL)%2Fapps%2F\(appData.id)%3FpaneId%3Dconnected-objects%22%2C%22bluemixUIVersion%22%3A%22v5%22%7D"
             }
             initDict["totalRAM"] = appData.limits.memory * 1_048_576
+
         } else if let totalRAM = metricsDict["totalRAMOnSystem"] {
             initDict["totalRAM"] = totalRAM
         }
@@ -254,6 +253,7 @@ public class Controller {
 
     public func requestMemoryHandler(request: RouterRequest, response: RouterResponse, next: @escaping () -> Void) throws {
         Log.info("Request for memory received.")
+
         guard let parsedBody = request.body else {
             Log.error("Bad request. Could not utilize memory.")
             response.status(.badRequest).send("Bad request. Could not utilize memory.")
@@ -262,19 +262,20 @@ public class Controller {
         }
 
         switch parsedBody {
-        case .json(let memObject):
-            guard memObject.type == .number else {
-                fallthrough
-            }
+        case .json(let obj):
 
-            if let memoryAmount = memObject.object as? Int {
+            if let memoryAmount = obj["value"] as? Int {
                 requestMemory(inBytes: memoryAmount, response: response, next: next)
-            } else if let memoryNSAmount = memObject.object as? NSNumber {
-                let memoryAmount = Int(memoryNSAmount)
+              
+            } else if let memoryNSAmount = obj["value"] as? NSNumber {
+                let memoryAmount = Int(truncating: memoryNSAmount)
                 requestMemory(inBytes: memoryAmount, response: response, next: next)
+
             } else {
                 fallthrough
+
             }
+
         default:
             Log.error("Bad value received. Could not utilize memory.")
             response.status(.badRequest).send("Bad value received. Could not utilize memory.")
@@ -301,7 +302,7 @@ public class Controller {
         }
         next()
 
-        self.autoScalingPolicy?.checkPolicyTriggers(metric: .Memory, value: memoryAmount, configMgr: self.configMgr, usingCredentials: self.credentials)
+        self.autoScalingPolicy?.checkPolicyTriggers(metric: .Memory, value: memoryAmount, configMgr: self.configMgr, usingCredentials: self.alertCredentials)
     }
 
     public func responseTimeHandler(request: RouterRequest, response: RouterResponse, next: @escaping () -> Void) throws {
@@ -318,25 +319,25 @@ public class Controller {
         }
 
         switch parsedBody {
-        case .json(let responseTimeObject):
-            guard responseTimeObject.type == .number else {
-                fallthrough
-            }
+        case .json(let obj):
 
-            if let responseTime = responseTimeObject.object as? UInt32 {
-                self.jsonDelayTime = responseTime
-                let _ = response.send(status: .OK)
-                Log.info("New response delay: \(responseTime) seconds")
-                self.autoScalingPolicy?.checkPolicyTriggers(metric: .ResponseTime, value: Int(responseTime), configMgr: self.configMgr, usingCredentials: self.credentials)
-            } else if let NSResponseTime = responseTimeObject.object as? NSNumber {
-                let responseTime = Int(NSResponseTime)
+            func scale(responseTime: Int) {
                 self.jsonDelayTime = UInt32(responseTime)
                 let _ = response.send(status: .OK)
                 Log.info("New response delay: \(responseTime) seconds")
-                self.autoScalingPolicy?.checkPolicyTriggers(metric: .ResponseTime, value: responseTime, configMgr: self.configMgr, usingCredentials: self.credentials)
+                self.autoScalingPolicy?.checkPolicyTriggers(metric: .ResponseTime, value: responseTime, configMgr: configMgr, usingCredentials: self.alertCredentials)
+            }
+
+            if let responseTime = obj["value"] as? Int {
+                scale(responseTime: responseTime)
+            }  else if let responseTime = obj["value"] as? UInt32 {
+                scale(responseTime: Int(responseTime))
+            } else if let NSResponseTime = obj["value"] as? NSNumber {
+                scale(responseTime: Int(truncating: NSResponseTime))
             } else {
                 fallthrough
             }
+
         default:
             Log.error("Bad value received. Could not change delay time.")
             response.status(.badRequest).send("Bad value received. Could not change delay time.")
@@ -369,23 +370,23 @@ public class Controller {
         }
 
         switch parsedBody {
-        case .json(let throughputObject):
-            guard throughputObject.type == .number else {
-                fallthrough
-            }
+        case .json(let obj):
 
-            if let throughput = throughputObject.object as? Int {
-                self.autoScalingPolicy?.checkPolicyTriggers(metric: .Throughput, value: throughput, configMgr: self.configMgr, usingCredentials: self.credentials)
+            if let throughput = obj["value"] as? Int {
+                self.autoScalingPolicy?.checkPolicyTriggers(metric: .Throughput, value: throughput, configMgr: configMgr, usingCredentials: self.alertCredentials)
                 Log.info("New throughput value: \(throughput) requests per second.")
                 let _ = response.send(status: .OK)
-            } else if let NSThroughput = throughputObject.object as? NSNumber {
-                let throughput = Int(NSThroughput)
-                self.autoScalingPolicy?.checkPolicyTriggers(metric: .Throughput, value: throughput, configMgr: self.configMgr, usingCredentials: self.credentials)
+
+            } else if let NSThroughput = obj["value"] as? NSNumber {
+                let throughput = Int(truncating: NSThroughput)
+                self.autoScalingPolicy?.checkPolicyTriggers(metric: .Throughput, value: throughput, configMgr: configMgr, usingCredentials: self.alertCredentials)
                 Log.info("New throughput value: \(throughput) requests per second.")
                 let _ = response.send(status: .OK)
+
             } else {
                 fallthrough
             }
+
         default:
             Log.error("Bad value received for throughput request.")
             response.status(.badRequest).send("Bad value received for throughput request.")
@@ -406,31 +407,27 @@ public class Controller {
         }
 
         switch parsedBody {
-        case .json(let payloadObject):
-            guard payloadObject.type == .dictionary else {
-                fallthrough
+        case .json(let obj):
+
+            if let delayFromPayload = obj["delay"] as? UInt32 {
+                self.circuitDelayTime = delayFromPayload
+            } else if let delayFromPayload = obj["delay"] as? Int {
+                self.circuitDelayTime = UInt32(delayFromPayload)
+            } else if let delayFromPayload = obj["delay"] as? NSNumber {
+                self.circuitDelayTime = UInt32(truncating: delayFromPayload)
             }
 
-            if let payload = payloadObject.object as? [String: Any] {
-                if let delayFromPayload = payload["delay"] as? UInt32 {
-                    self.circuitDelayTime = delayFromPayload
-                } else if let delayFromPayload = payload["delay"] as? Int {
-                    self.circuitDelayTime = UInt32(delayFromPayload)
-                } else if let delayFromPayload = payload["delay"] as? NSNumber {
-                    self.circuitDelayTime = UInt32(Int(delayFromPayload))
-                }
-                if let enabledBool = payload["enabled"] as? Bool {
-                    self.circuitEndpointEnabled = enabledBool
-                } else if let enabledInt = payload["enabled"] as? Int, enabledInt == 1 {
-                    self.circuitEndpointEnabled = true
-                } else {
-                    self.circuitEndpointEnabled = false
-                }
-                let _ = response.send(status: .OK)
-                Log.info("New delay is \(self.circuitDelayTime) seconds, circuit endpoint enabled state is \(self.circuitEndpointEnabled)")
+            if let enabledBool = obj["enabled"] as? Bool {
+                self.circuitEndpointEnabled = enabledBool
+            } else if let enabledInt = obj["enabled"] as? Int, enabledInt == 1 {
+                self.circuitEndpointEnabled = true
             } else {
-                fallthrough
+                self.circuitEndpointEnabled = false
             }
+
+            let _ = response.send(status: .OK)
+            Log.info("New delay is \(self.circuitDelayTime) seconds, circuit endpoint enabled state is \(self.circuitEndpointEnabled)")
+
         default:
             Log.error("Bad value received. Could not change endpoint state.")
             response.status(.badRequest).send("Bad value received. Could not change endpoint state.")
@@ -438,7 +435,7 @@ public class Controller {
     }
 
     public func invokeCircuitHandler(request: RouterRequest, response: RouterResponse, next: @escaping () -> Void) {
-        guard let starterURL = URL(string: "\(self.configMgr.url)/internalCircuitEndpoint") else {
+        guard let starterURL = URL(string: "\(cloudEnv.url)/internalCircuitEndpoint") else {
             response.status(.badRequest).send("Invalid URL supplied.")
             next()
             return

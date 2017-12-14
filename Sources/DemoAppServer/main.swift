@@ -14,7 +14,6 @@
  * limitations under the License.
  **/
 
-import Foundation
 import Kitura
 import KituraWebSocket
 import LoggerAPI

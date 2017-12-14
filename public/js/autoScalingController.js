@@ -25,14 +25,14 @@ var autoScalingController = function autoScalingController($http) {
     self.throughputValue = 0;
     self.workers = [];
     self.intervals = {};
-    
+
     self.displayMemoryValue = function displayMemoryValue(memVal, memUnit) {
         return (memVal/memUnit).toFixed(3);
     };
-    
+
     self.requestMemory = function requestMemory(memValue) {
         self.memoryMessage = 'Sending request...';
-        $http.post('/memory', memValue, {timeout: 60000})
+        $http.post('/memory', {"value": memValue}, {timeout: 60000})
         .then(function onSuccess(response) {
                 self.memoryMessage = 'Success! Memory value has been adjusted.';
               },
@@ -44,14 +44,14 @@ var autoScalingController = function autoScalingController($http) {
                 self.memoryMessage = errStr;
         });
     };
-    
+
     self.requestThroughput = function requestThroughput(throughputValue) {
         self.throughputMessage = 'Adjusting throughput...';
         for (var i = 0; i < self.workers.length; i++) {
             worker.postMessage({workerNum: i, interval: self.intervals[i], requests: throughputValue, endpoint: '/requestJSON'});
         }
         self.throughputMessage = 'Throughput adjusted. Notifying server...';
-        $http.post('/throughput', throughputValue, {timeout: 60000})
+        $http.post('/throughput', {"value": throughputValue}, {timeout: 60000})
         .then(function onSuccess(response) {
             self.throughputMessage = 'Throughput has been adjusted and the server has been notified.';
         },
@@ -63,7 +63,7 @@ var autoScalingController = function autoScalingController($http) {
             self.throughputMessage = errStr;
         });
     };
-    
+
     self.checkMessageResponse = function checkMessageResponse(e) {
         if (e.data.type == 'interval') {
             self.intervals[e.data.workerNum] = e.data.interval;
@@ -71,17 +71,17 @@ var autoScalingController = function autoScalingController($http) {
             console.log(e.data);
         }
     };
-    
+
     // We have a pool of 30 web workers.
     for (var i = 0; i < 30; i++) {
         var worker = new Worker('js/throughputGenerator.js');
         worker.onmessage = self.checkMessageResponse;
         self.workers.push(worker);
     }
-    
+
     self.setResponseDelay = function setResponseDelay(responseTime) {
         self.responseTimeMessage = 'Sending request...';
-        $http.post('/responseTime', responseTime, {timeout: 60000})
+        $http.post('/responseTime', {"value": responseTime}, {timeout: 60000})
         .then(function onSuccess(response) {
             self.responseTimeMessage = 'Success! Delay has been changed.';
         },
@@ -93,7 +93,7 @@ var autoScalingController = function autoScalingController($http) {
             self.responseTimeMessage = errStr;
         });
     };
-    
+
     self.syncValues = function syncValues() {
         self.syncMessage = 'Syncing...';
         $http.get('/sync', {timeout: 60000})

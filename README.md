@@ -3,7 +3,7 @@
 ![Linux](https://img.shields.io/badge/os-linux-green.svg?style=flat)
 
 # Swift-Enterprise-Demo
-Swift-Enterprise-Demo is designed to highlight new enterprise capabilities that you can leverage when you deploy your Swift applications to Bluemix. Specifically, this application showcases the following Bluemix services and new libraries for the Swift language:
+Swift-Enterprise-Demo is designed to highlight new enterprise capabilities that you can leverage when you deploy your Swift applications to IBM Cloud. Specifically, this application showcases the following IBM Cloud services and new libraries for the Swift language:
 
 * Auto Scaling
 * Alert Notification
@@ -17,28 +17,28 @@ The browser-based component of this application provides UI widgets that you can
 ## Application Communication Workflow
 ![Application Workflow](imgs/arch-ent-swift.png)
 
-1. The user configures the setting for the Circuit Breaker library in the code before deploying the application to Bluemix (using their IDE of choice).
-2. After deploying the application, the user creates a policy on Bluemix to set up the Auto-Scaling and Alert Notification services. This task is performed using the Bluemix dashboard.
+1. The user configures the setting for the Circuit Breaker library in the code before deploying the application to IBM Cloud (using their IDE of choice).
+2. After deploying the application, the user creates a policy on IBM Cloud to set up the Auto-Scaling and Alert Notification services. This task is performed using the IBM Cloud dashboard.
 3. The user interacts with the application UI in their browser.
 4. When the user performs any action, the UI calls the Swift application back-end component.
-5. When the conditions for auto-scaling policy are satisfied, the application scales in Bluemix.
+5. When the conditions for auto-scaling policy are satisfied, the application scales in IBM Cloud.
 6. When several requests fail for the endpoint configured for circuit breaking, the circuit breaker library activates.
 
 ## Swift version
-The latest version of Swift-Enterprise-Demo works with the `3.1.1` version of the Swift binaries. You can download this version of the Swift binaries by following this [link](https://swift.org/download/#snapshots).
+The latest version of Swift-Enterprise-Demo works with the `4.0.2` version of the Swift binaries. You can download this version of the Swift binaries by following this [link](https://swift.org/download/#snapshots).
 
-## Deploying the application to Bluemix
-### Using the Deploy to Bluemix button
-Clicking on the button below creates a Bluemix DevOps Toolchain and deploys this application to Bluemix. The `manifest.yml` file [included in the repo] is parsed to obtain the name of the application, configuration details, and the list of services that should be provisioned. For further details on the structure of the `manifest.yml` file, see the [Cloud Foundry documentation](https://docs.cloudfoundry.org/devguide/deploy-apps/manifest.html#minimal-manifest).
+## Deploying the application to IBM Cloud
+### Using the Deploy to IBM Cloud button
+Clicking on the button below creates a IBM Cloud DevOps Toolchain and deploys this application to IBM Cloud. The `manifest.yml` file [included in the repo] is parsed to obtain the name of the application, configuration details, and the list of services that should be provisioned. For further details on the structure of the `manifest.yml` file, see the [Cloud Foundry documentation](https://docs.cloudfoundry.org/devguide/deploy-apps/manifest.html#minimal-manifest).
 
-[![Deploy to Bluemix](https://bluemix.net/deploy/button.png)](https://bluemix.net/deploy?repository=https://github.com/IBM/swift-enterprise-demo.git&branch=master)
+[![Deploy to IBM Cloud](https://bluemix.net/deploy/button.png)](https://bluemix.net/deploy?repository=https://github.com/IBM/swift-enterprise-demo.git&branch=master)
 
-Once deployment to Bluemix is completed, you can access the route assigned to your application using the web browser of your choice (e.g., Chrome, FireFox, etc.). You should then see the welcome page for the SwiftEnterpriseDemo app.
+Once deployment to IBM Cloud is completed, you can access the route assigned to your application using the web browser of your choice (e.g., Chrome, FireFox, etc.). You should then see the welcome page for the SwiftEnterpriseDemo app.
 
-Note that the [IBM Bluemix buildpack for Swift](https://github.com/IBM-Swift/swift-buildpack) is used for the deployment of this app to Bluemix. This IBM Bluemix Runtime for Swift is currently installed in the following Bluemix regions: US South, United Kingdom, and Sydney.
+Note that the [IBM Cloud buildpack for Swift](https://github.com/IBM-Swift/swift-buildpack) is used for the deployment of this app to IBM Cloud. This IBM Cloud Runtime for Swift is currently installed in the following IBM Cloud regions: US South, United Kingdom, and Sydney.
 
-### Using the Bluemix command line
-You can also manually deploy the Swift-Enterprise-Demo app to Bluemix. Though not as magical as using the Bluemix button above, manually deploying the app gives you some insights about what is happening behind the scenes. Remember that you'd need the Bluemix [command line](http://clis.ng.bluemix.net/ui/home.html) installed on your system to deploy the app to Bluemix.
+### Using the IBM Cloud command line
+You can also manually deploy the Swift-Enterprise-Demo app to IBM Cloud. Though not as magical as using the IBM Cloud button above, manually deploying the app gives you some insights about what is happening behind the scenes. Remember that you'd need the IBM Cloud [command line](http://clis.ng.bluemix.net/ui/home.html) installed on your system to deploy the app to IBM Cloud.
 
 Execute the following command to clone the Git repository:
 
@@ -46,7 +46,7 @@ Execute the following command to clone the Git repository:
 git clone https://github.com/IBM/swift-enterprise-demo
 ```
 
-Go to the project's root folder on your system and execute the `Cloud-Scripts/cloud-foundry/services.sh` script to create the services Swift-Enterprise-Demo depends on. Please note that you should have logged on to Bluemix before attempting to execute this script. For information on how to log in, see the Bluemix [documentation](https://console.ng.bluemix.net/docs/starters/install_cli.html).
+Go to the project's root folder on your system and execute the `Cloud-Scripts/cloud-foundry/services.sh` script to create the services Swift-Enterprise-Demo depends on. Please note that you should have logged on to IBM Cloud before attempting to execute this script. For information on how to log in, see the IBM Cloud [documentation](https://console.ng.bluemix.net/docs/starters/install_cli.html).
 
 Executing the `Cloud-Scripts/cloud-foundry/services.sh` script should result in output similar to this:
 
@@ -66,7 +66,7 @@ Creating service instance SwiftEnterpriseDemo-Auto-Scaling in org roliv@us.ibm.c
 OK
 ```
 
-After the services are created, you can issue the `bx app push` command from the project's root folder to deploy the Swift-Enterprise-Demo application to Bluemix.
+After the services are created, you can issue the `bx app push` command from the project's root folder to deploy the Swift-Enterprise-Demo application to IBM Cloud.
 
 ```bash
 $ bx app push
@@ -164,7 +164,7 @@ buildpack: swift_buildpack
 #0   running   2017-03-12 11:47:18 PM   0.0%   1M of 256M   247M of 1G
 ```
 
-Once the application is running on Bluemix, you can access your application assigned URL (i.e. route). To find the route, you can log on to your [Bluemix account](https://console.ng.bluemix.net), or you can inspect the output from the execution of the `bluemix app push` or `bx app show <application name>` commands. The string value shown next to the `urls` field contains the assigned route.  Use that route as the URL to access the sample server using the browser of your choice.
+Once the application is running on IBM Cloud, you can access your application assigned URL (i.e. route). To find the route, you can log on to your [IBM Cloud account](https://console.ng.bluemix.net), or you can inspect the output from the execution of the `bx app push` or `bx app show <application name>` commands. The string value shown next to the `urls` field contains the assigned route.  Use that route as the URL to access the sample server using the browser of your choice.
 
 ```bash
 $ bx app show SwiftEnterpriseDemo
@@ -187,36 +187,24 @@ Ricardos-MacBook-Pro:swift-enterprise-demo olivieri$
 ```
 
 ## Configuring the Swift-Enterprise-Demo application
-The `cloud_config.json` configuration file found in the root folder of the application's repository should be updated before you start using the application.
+The `configuration.json` file found in the config/ directory of the application's root folder should be updated before you start using the application.
 
 ```bash
-$ cat cloud_config.json
-{ "name": "SwiftEnterpriseDemo",
-  "cf-oauth-token": "<token>",
-  "vcap": {
-    "services": {
-      "alertnotification": [
-        {
-          "name": "SwiftEnterpriseDemo-Alert",
-          "label": "alertnotification",
-          "plan": "authorizedusers",
-          "credentials": {
-            "url": "<url>",
-            "name": "<name>",
-            "password": "<password>",
-            "swaggerui": "https://ibmnotifybm.mybluemix.net/docs/alerts/v1"
-          }
-        }
-      ]
-    }
+$ cat config/configuration.json
+{
+  "alertnotification": {
+    "url": "<url>",
+    "name": "<name>",
+    "password": "<password>",
+    "swaggerui": "https://ibmnotifybm.mybluemix.net/docs/alerts/v1"
   }
 }
 ```
 
 ### Credentials for the IBM Alert Notification service
-You should obtain the credentials for the [IBM Alert Notification](https://console.ng.bluemix.net/docs/services/AlertNotification/index.html) service instance you created earlier and update the values for the `url`, `name`, and `password` fields accordingly. To obtain these credentials, you can access the application's dashboard on Bluemix and go to the `Connections` page:
+You should obtain the credentials for the [IBM Alert Notification](https://console.ng.bluemix.net/docs/services/AlertNotification/index.html) service instance you created earlier and update the values for the `url`, `name`, and `password` fields accordingly. To obtain these credentials, you can access the application's dashboard on IBM Cloud and go to the `Connections` page:
 
-<p align="center"><img src="imgs/app-dashboard-bmx.png" alt="demo app dashboard bluemix" /></p>
+<p align="center"><img src="imgs/app-dashboard-bmx.png" alt="demo app dashboard IBM Cloud" /></p>
 
 ### Cloud Foundry OAuth authentication token
 You also need to obtain a Cloud Foundry OAuth authentication token and update the value for the `cf-oauth-token` field. To obtain this token, you can execute the following command:
@@ -231,16 +219,16 @@ Make sure you include the `bearer` keyword along with the token when you update 
 ### Auto-Scaling policies
 Finally, you should also create [Auto-Scaling](https://console.ng.bluemix.net/docs/services/Auto-Scaling/index.html) policies to leverage the scaling capabilities provided by this service. We recommend creating the following Auto-Scaling rules for the Swift-Enterprise-Demo:
 
-<p align="center"><img src="imgs/auto-scaling-rules-1.png" alt="auto scaling rule dashboard bluemix" /></p>
+<p align="center"><img src="imgs/auto-scaling-rules-1.png" alt="auto scaling rule dashboard IBM Cloud" /></p>
 
-<p align="center"><img src="imgs/auto-scaling-rules-2.png" alt="auto scaling rule dashboard bluemix" /></p>
+<p align="center"><img src="imgs/auto-scaling-rules-2.png" alt="auto scaling rule dashboard IBM Cloud" /></p>
 
-<p align="center"><img src="imgs/auto-scaling-rules-3.png" alt="auto scaling rule dashboard bluemix" /></p>
+<p align="center"><img src="imgs/auto-scaling-rules-3.png" alt="auto scaling rule dashboard IBM Cloud" /></p>
 
 Also, the Swift-Enterprise-Demo application sends alerts based on the Auto-Scaling policies defined for the application. Hence, if there are no policies define for the application, no alerts will be sent out.
 
-### Update the Swift-Enterprise-Demo application instance running on Bluemix
-Once you've updated the `cloud_config.json` configuration file, you should update your application instance of Swift-Enterprise-Demo on Bluemix. To do, you should execute the `bx app push` command from the root folder of the applications's repository.
+### Update the Swift-Enterprise-Demo application instance running on IBM Cloud
+Once you've updated the `config/configuration.json` configuration file, you should update your application instance of Swift-Enterprise-Demo on IBM Cloud. To do, you should execute the `bx app push` command from the root folder of the applications's repository.
 
 ## Running the application locally
 In order to build the application locally, use the appropriate command depending on the operating system you are running on your development system:
@@ -362,8 +350,8 @@ After you have started the application, you can use your browser of choice and p
 
 A few points you should be aware of:
 
-- When running the Swift-Enterprise-Demo app locally, you won't be able to leverage any of the auto-scaling capabilities. To see these capabilities in action, you need to run the application on Bluemix.
-- When running the Swift-Enterprise-Demo app locally, if you click on the `Metrics Dashboard` link, you will be taken to the [SwiftMetrics](#swiftmetrics) dashboard. If you are running the demo application on Bluemix, then clicking on the `Metrics Dashboard` link takes you to the Bluemix Availability Monitoring dashboard.
+- When running the Swift-Enterprise-Demo app locally, you won't be able to leverage any of the auto-scaling capabilities. To see these capabilities in action, you need to run the application on IBM Cloud.
+- When running the Swift-Enterprise-Demo app locally, if you click on the `Metrics Dashboard` link, you will be taken to the [SwiftMetrics](#swiftmetrics) dashboard. If you are running the demo application on IBM Cloud, then clicking on the `Metrics Dashboard` link takes you to the IBM Cloud Availability Monitoring dashboard.
 
 ### SwiftMetrics
 When running locally, you can access the SwiftMetrics dashboard by clicking on the `Metrics Dashboard` link. Doing so, will open a new tab in your browser that points to this URL: `http://localhost:8080/swiftmetrics-dash/`. The SwiftMetrics dashboard gives you access to important metrics about the health of the application, such as the average HTTP response time, HTTP throughput, CPU usage, memory usage, and environment details.
@@ -373,7 +361,7 @@ When running locally, you can access the SwiftMetrics dashboard by clicking on t
 For more information on SwiftMetrics, see [Application Metrics for Swift](https://developer.ibm.com/swift/application-metrics-for-swift/).
 
 ## Using the Swift-Enterprise-Demo app
-For details on how to use this demo app to showcase the different enterprise capabilities that are now available for Swift applications on Bluemix, we put together the following series of videos:
+For details on how to use this demo app to showcase the different enterprise capabilities that are now available for Swift applications on IBM Cloud, we put together the following series of videos:
 
 * [Swift Enterprise Demo - Auto-Scaling](https://youtu.be/-da2e-24DUM)
 * [Swift Enterprise Demo - Circuit Breaker](https://youtu.be/QhI0roWWYik)

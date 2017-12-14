@@ -1,0 +1,11 @@
+{
+  "Alert": {
+    "url": "<url>",
+    "name": "<name>",
+    "password": "<password>",
+    "swaggerui": "https://ibmnotifybm.mybluemix.net/docs/alerts/v1"
+    },
+  "cf-oauth-token": {
+    "token": "<token>"
+  }
+}
