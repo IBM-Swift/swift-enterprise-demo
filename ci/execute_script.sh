@@ -26,8 +26,6 @@ fi
 
 if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
   curl -fsSL https://clis.ng.bluemix.net/install/linux | sh
-  tar -xvf Bluemix_CLI.tar.gz
-  cd Bluemix_CLI && sudo ./install_bluemix_cli && cd ..
   echo "y" | bx update
   bx login -a https://$BLUEMIX_REGION -u $BLUEMIX_USER -p $BLUEMIX_PWD -s applications-dev -o $BLUEMIX_ORGANIZATION
   TOKEN=$(bx cf oauth-token)
