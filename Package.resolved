@@ -1,0 +1,187 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "AlertNotifications",
+        "repositoryURL": "https://github.com/IBM-Swift/alert-notification-sdk.git",
+        "state": {
+          "branch": null,
+          "revision": "5052a72b32149cf1d30f1477d1fdd4f7eb16690c",
+          "version": "1.0.1"
+        }
+      },
+      {
+        "package": "CCurl",
+        "repositoryURL": "https://github.com/IBM-Swift/CCurl.git",
+        "state": {
+          "branch": null,
+          "revision": "f481bd86e58787824cc1c1ec1786e03b67831f38",
+          "version": "0.4.1"
+        }
+      },
+      {
+        "package": "CircuitBreaker",
+        "repositoryURL": "https://github.com/IBM-Swift/CircuitBreaker.git",
+        "state": {
+          "branch": null,
+          "revision": "7f6fe4ced83ddea67ac59f86724638d4e1619039",
+          "version": "2.0.1"
+        }
+      },
+      {
+        "package": "CloudConfiguration",
+        "repositoryURL": "https://github.com/IBM-Swift/CloudConfiguration.git",
+        "state": {
+          "branch": null,
+          "revision": "5e062f373825769700cbf3660fe55b119aaa969b",
+          "version": "2.0.6"
+        }
+      },
+      {
+        "package": "CloudFoundryEnv",
+        "repositoryURL": "https://github.com/IBM-Swift/Swift-cfenv.git",
+        "state": {
+          "branch": null,
+          "revision": "6ded559c54871fd7a94a0c7fabe51e096bb1e392",
+          "version": "4.1.0"
+        }
+      },
+      {
+        "package": "CommonCrypto",
+        "repositoryURL": "https://github.com/IBM-Swift/CommonCrypto.git",
+        "state": {
+          "branch": null,
+          "revision": "9156d238dbc4c15455b77b45e721b2bb0b995e31",
+          "version": "0.1.5"
+        }
+      },
+      {
+        "package": "Configuration",
+        "repositoryURL": "https://github.com/IBM-Swift/Configuration.git",
+        "state": {
+          "branch": null,
+          "revision": "9973bcc64f41c81c9716bf1306079be61f29c998",
+          "version": "1.0.4"
+        }
+      },
+      {
+        "package": "Cryptor",
+        "repositoryURL": "https://github.com/IBM-Swift/BlueCryptor.git",
+        "state": {
+          "branch": null,
+          "revision": "16f9c7ddcbe11bbd32106a791ebef2108a4e9183",
+          "version": "0.8.21"
+        }
+      },
+      {
+        "package": "HeliumLogger",
+        "repositoryURL": "https://github.com/IBM-Swift/HeliumLogger.git",
+        "state": {
+          "branch": null,
+          "revision": "2afeb4c02f5a48a7fbd081fe8607b91eeebd7ecb",
+          "version": "1.7.1"
+        }
+      },
+      {
+        "package": "Kitura",
+        "repositoryURL": "https://github.com/IBM-Swift/Kitura.git",
+        "state": {
+          "branch": null,
+          "revision": "e02c756134c5b399cfc45f186bc2c6f1d51032d1",
+          "version": "1.7.9"
+        }
+      },
+      {
+        "package": "Kitura-TemplateEngine",
+        "repositoryURL": "https://github.com/IBM-Swift/Kitura-TemplateEngine.git",
+        "state": {
+          "branch": null,
+          "revision": "8e75a213bf4dd7b5effd03848335e344535969aa",
+          "version": "1.7.2"
+        }
+      },
+      {
+        "package": "Kitura-WebSocket",
+        "repositoryURL": "https://github.com/IBM-Swift/Kitura-WebSocket.git",
+        "state": {
+          "branch": null,
+          "revision": "312fd9a6f126be1befd8373a263669491b373188",
+          "version": "0.9.1"
+        }
+      },
+      {
+        "package": "Kitura-net",
+        "repositoryURL": "https://github.com/IBM-Swift/Kitura-net.git",
+        "state": {
+          "branch": null,
+          "revision": "96c196ef01533f199642e7d39cff51dd50c05faf",
+          "version": "1.7.20"
+        }
+      },
+      {
+        "package": "KituraRequest",
+        "repositoryURL": "https://github.com/IBM-Swift/Kitura-Request.git",
+        "state": {
+          "branch": null,
+          "revision": "0330cb176e02c7690b4e6445e560647513305ac9",
+          "version": "0.8.2"
+        }
+      },
+      {
+        "package": "LoggerAPI",
+        "repositoryURL": "https://github.com/IBM-Swift/LoggerAPI.git",
+        "state": {
+          "branch": null,
+          "revision": "6b62fe66da9b8794d6581e5c341710eea3173cd4",
+          "version": "1.7.1"
+        }
+      },
+      {
+        "package": "SSLService",
+        "repositoryURL": "https://github.com/IBM-Swift/BlueSSLService.git",
+        "state": {
+          "branch": null,
+          "revision": "d657234966e61ec3d9e9c2edec2be0c03cae6e99",
+          "version": "0.12.68"
+        }
+      },
+      {
+        "package": "Socket",
+        "repositoryURL": "https://github.com/IBM-Swift/BlueSocket.git",
+        "state": {
+          "branch": null,
+          "revision": "ebd0fd8372c73fd467a447f80f2763d34f3dbe9c",
+          "version": "0.12.79"
+        }
+      },
+      {
+        "package": "SwiftMetrics",
+        "repositoryURL": "https://github.com/RuntimeTools/SwiftMetrics.git",
+        "state": {
+          "branch": null,
+          "revision": "e124cff8ab2e2ecdc90ea626d59cf3f723a95f1f",
+          "version": "1.2.5"
+        }
+      },
+      {
+        "package": "SwiftyJSON",
+        "repositoryURL": "https://github.com/IBM-Swift/SwiftyJSON.git",
+        "state": {
+          "branch": null,
+          "revision": "1190845cf7d25a5c8ea7653fe03dcdd39a082056",
+          "version": "17.0.0"
+        }
+      },
+      {
+        "package": "omr-agentcore",
+        "repositoryURL": "https://github.com/RuntimeTools/omr-agentcore",
+        "state": {
+          "branch": null,
+          "revision": "5a2361ba1f005596a2bfa28de76ed4acf1e71c33",
+          "version": "3.2.4-swift4"
+        }
+      }
+    ]
+  },
+  "version": 1
+}
