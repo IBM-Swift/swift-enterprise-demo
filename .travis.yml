@@ -1,5 +1,5 @@
 ##
-# Copyright IBM Corporation 2017
+# Copyright IBM Corporation 2017, 2018
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -34,7 +34,7 @@ matrix:
       dist: trusty
       sudo: required
     - os: osx
-      osx_image: xcode9.1
+      osx_image: xcode9.2
       sudo: required
 
 before_install:

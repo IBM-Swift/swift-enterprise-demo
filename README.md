@@ -25,7 +25,7 @@ The browser-based component of this application provides UI widgets that you can
 6. When several requests fail for the endpoint configured for circuit breaking, the circuit breaker library activates.
 
 ## Swift version
-The latest version of Swift-Enterprise-Demo works with the `4.0.2` version of the Swift binaries. You can download this version of the Swift binaries by following this [link](https://swift.org/download/#snapshots).
+The latest version of Swift-Enterprise-Demo works with the `4.0.3` version of the Swift binaries. You can download this version of the Swift binaries by following this [link](https://swift.org/download/#snapshots).
 
 ## Deploying the application to IBM Cloud
 ### Using the Deploy to IBM Cloud button
