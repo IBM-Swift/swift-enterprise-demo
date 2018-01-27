@@ -187,7 +187,7 @@ Ricardos-MacBook-Pro:swift-enterprise-demo olivieri$
 ```
 
 ## Configuring the Swift-Enterprise-Demo application
-The `configuration.json` file found in the config/ directory of the application's root folder should be updated before you start using the application.
+The `configuration.json` file found in the `config/` directory of the application's root folder should be updated before you start using the application.
 
 ```bash
 $ cat config/configuration.json
