@@ -1,5 +1,5 @@
 /**
- * Copyright IBM Corporation 2017
+ * Copyright IBM Corporation 2018
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,11 +33,12 @@ func circuitTimeoutCallback(_ err: BreakerError, _ fallbackArgs: (response: Rout
     case BreakerError.fastFail:
         response.status(.expectationFailed).send("Request failed fast.")
         break
+    default: break
     }
     next()
 }
 
-func circuitRequestWrapper(invocation: Invocation<(URL, RouterResponse, () -> Void), Void, (RouterResponse, () -> Void)>) {
+func circuitRequestWrapper(invocation: Invocation<(URL, RouterResponse, () -> Void), (RouterResponse, () -> Void)>) {
     let url: URL = invocation.commandArgs.0
     let response: RouterResponse = invocation.commandArgs.1
     let next: () -> Void = invocation.commandArgs.2
@@ -48,7 +49,7 @@ func circuitRequestWrapper(invocation: Invocation<(URL, RouterResponse, () -> Vo
         
         guard error == nil, let data = restData else {
             response.status(.internalServerError).send("Could not parse server response.")
-            invocation.notifyFailure()
+            invocation.notifyFailure(error: BreakerError(reason: error?.localizedDescription))
             return
         }
         
@@ -57,13 +58,13 @@ func circuitRequestWrapper(invocation: Invocation<(URL, RouterResponse, () -> Vo
             invocation.notifySuccess()
         } else {
             let _ = response.send(status: .expectationFailed)
-            invocation.notifyFailure()
+            invocation.notifyFailure(error: BreakerError(reason: error?.localizedDescription))
         }
     }
     networkRequest(url: url, method: "GET", callback: callback)
 }
 
-func broadcastCircuitStatus(breaker: CircuitBreaker<(URL, RouterResponse, () -> Void), Void, (RouterResponse, () -> Void)>) {
+func broadcastCircuitStatus(breaker: CircuitBreaker<(URL, RouterResponse, () -> Void), (RouterResponse, () -> Void)>) {
     let state = breaker.breakerState
     for (_, connection) in controller.wsConnections {
         switch state {
@@ -73,6 +74,7 @@ func broadcastCircuitStatus(breaker: CircuitBreaker<(URL, RouterResponse, () -> 
             connection.send(message: "half-open")
         case .closed:
             connection.send(message: "closed")
+        default: break
         }
     }
 }

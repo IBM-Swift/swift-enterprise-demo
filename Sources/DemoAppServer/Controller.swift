@@ -58,7 +58,7 @@ public class Controller {
     var jsonDispatchQueue: DispatchQueue
 
     // Circuit breaker.
-    let breaker: CircuitBreaker<(URL, RouterResponse, () -> Void), Void, (RouterResponse, () -> Void)>
+    let breaker: CircuitBreaker<(URL, RouterResponse, () -> Void), (RouterResponse, () -> Void)>
     var wsConnections: [String: WebSocketConnection]  = [:]
     var broadcastQueue: DispatchQueue
     var circuitEndpointEnabled: Bool
@@ -89,7 +89,7 @@ public class Controller {
         self.jsonDispatchQueue = DispatchQueue(label: "jsonResponseQueue")
 
         // Circuit breaker.
-        self.breaker = CircuitBreaker(timeout: 10000, maxFailures: 3, rollingWindow: 60000, contextCommand: circuitRequestWrapper, fallback: circuitTimeoutCallback)
+        self.breaker = CircuitBreaker(name: "breaker",timeout: 10000, maxFailures: 3, rollingWindow: 60000, command: circuitRequestWrapper, fallback: circuitTimeoutCallback)
         self.broadcastQueue = DispatchQueue(label: "circuitBroadcastQueue", qos: DispatchQoS.userInitiated)
         self.circuitEndpointEnabled = true
         self.circuitDelayTime = 0
