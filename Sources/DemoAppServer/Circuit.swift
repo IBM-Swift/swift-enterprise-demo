@@ -74,7 +74,6 @@ func broadcastCircuitStatus(breaker: CircuitBreaker<(URL, RouterResponse, () -> 
             connection.send(message: "half-open")
         case .closed:
             connection.send(message: "closed")
-        default: break
         }
     }
 }
