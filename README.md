@@ -1,3 +1,7 @@
+# WARNING: This repository is no longer maintained :warning:
+
+> This repository will not be updated. The repository will be kept available in read-only mode.
+
 [![Build Status - Master](https://travis-ci.org/IBM/swift-enterprise-demo.svg?branch=master)](https://travis-ci.org/IBM/swift-enterprise-demo)
 ![macOS](https://img.shields.io/badge/os-macOS-green.svg?style=flat)
 ![Linux](https://img.shields.io/badge/os-linux-green.svg?style=flat)
